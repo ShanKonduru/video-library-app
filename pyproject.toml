@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "video-library-app"
+version = "0.1.0"
+description = "a micro service based python flask app to document/store all youtube videos"
+authors = ["ShanKonduru <ShanKonduru@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "video_library_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^2.3.3"
+SQLite3-0611 = "^0.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
