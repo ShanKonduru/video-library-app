@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Item</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+<body>
+    <h1>Edit Item</h1>
+    <form method="POST" action="/edit/{{ item['id'] }}">
+        <label for="title">Title:</label>
+        <input type="text" name="title" value="{{ item['title'] }}" required>
+        <label for="url">URL:</label>
+        <input type="text" name="url" value="{{ item['url'] }}">
+        <button type="submit">Save</button>
+    </form>
+    <a href="/">Back to Item List</a>
+</body>
+</html>
