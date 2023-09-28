@@ -1,17 +1,37 @@
 version: '3'
-
 services:
-  main_app:
+  api:
     build:
-      context: .
+      context: ./app/api
+      dockerfile: Dockerfile.api
     ports:
       - "5000:5000"
-    volumes:
-      - ./:/app
-    depends_on:
-      - database
+    networks:
+      - video-lib-network
+    deploy:
+      replicas: 1  # Set the desired number of replicas
 
-  database:
-    image: sqlite:latest
-    volumes:
-      - ./database.db:/app/database.db
+  db:
+    build:
+      context: ./app/db
+      dockerfile: Dockerfile.db
+    ports:
+      - "5555:5555"
+    networks:
+      - video-lib-network
+    deploy:
+      replicas: 1  # Set the desired number of replicas
+
+  ux:
+    build:
+      context: ./app/ux
+      dockerfile: Dockerfile.ux
+    ports:
+      - "8888:8888"
+    networks:
+      - video-lib-network
+    deploy:
+      replicas: 1  # Set the desired number of replicas
+
+networks:
+  video-lib-network:

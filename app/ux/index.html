@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Video Library Home Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    input {
+      padding: 5px;
+      margin: 5px;
+    }
+
+    button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #fetchButton {
+      margin-top: 20px;
+    }
+
+    #recordsTable {
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>My Video Library Home Page</h1>
+  <div>
+    <label for="Title">Title:</label>
+    <input type="text" id="Title" required />
+  </div>
+  <div>
+    <label for="Url">URL:</label>
+    <input type="text" id="Url" required />
+  </div>
+  <div>
+    <button id="addBtn">Add</button>
+  </div>
+  <div>
+    <h1>Fetch Records</h1>
+    <button id="fetchButton">Fetch Records</button>
+    <table id="recordsTable" border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody id="recordsBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const fetchButton = document.getElementById('fetchButton');
+    const recordsBody = document.getElementById('recordsBody');
+
+    fetchButton.addEventListener('click', () => {
+      fetch('http://localhost:5555/get_all_records')
+        .then(response => response.json())
+        .then(records => {
+          recordsBody.innerHTML = '';
+          records.forEach(record => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                            <td>${record.Id}</td>
+                            <td>${record.Title}</td>
+                            <td>${record.Url}</td>
+                        `;
+            recordsBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    const addBtn = document.getElementById("addBtn");
+
+    const titleInput = document.getElementById("Title");
+    const urlInput = document.getElementById("Url");
+
+    const apiPort = 5000; // Change this to your desired port number
+
+    addBtn.addEventListener("click", async () => {
+      const title = titleInput.value;
+      const url = urlInput.value;
+      const response = await fetch(`http://localhost:${apiPort}/add`, {
+        // Use the apiPort variable
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, url }),
+      });
+      const data = await response.json();
+
+      try {
+        const response = await fetch('http://localhost:5555/insert', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(resultdata)
+        });
+
+        if (response.ok) {
+          console.info('inserted successfully.');
+        } else {
+          console.error('Error inserting data.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+
+</html>
